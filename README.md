@@ -1,7 +1,8 @@
 # Veritas
 
+![CI](https://github.com/Raghaverma/Veritas/actions/workflows/ci.yml/badge.svg)
 ![Version](https://img.shields.io/badge/version-0.0.1-blue.svg?cacheSeconds=2592000)
-![License](https://img.shields.io/badge/license-UNLICENSED-yellow.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![NestJS](https://img.shields.io/badge/nestjs-11.x-red.svg)
 
 
@@ -449,7 +450,7 @@ This is a template repository. Fork it and customize it for your needs!
 
 ## 📄 License
 
-Veritas is UNLICENSED.
+Veritas is [MIT licensed](LICENSE).
 
 ---
 
