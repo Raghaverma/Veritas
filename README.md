@@ -1,5 +1,10 @@
 # Veritas
 
+![Version](https://img.shields.io/badge/version-0.0.1-blue.svg?cacheSeconds=2592000)
+![License](https://img.shields.io/badge/license-UNLICENSED-yellow.svg)
+![NestJS](https://img.shields.io/badge/nestjs-11.x-red.svg)
+
+
 **A production-ready NestJS backend template for hyper-growth applications.**
 
 Veritas is a battle-tested, enterprise-grade backend framework that implements **Domain-Driven Design (DDD)**, **Event Sourcing**, and **CQRS patterns**. Built by the hypeliv team, it's designed to ship production-ready code from day one.
@@ -55,7 +60,7 @@ HTTP Request → Auth → Command → Domain → Event → Queue → Worker → 
 ### 1. Clone and Install
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/Raghaverma/Veritas.git
 cd veritas
 yarn install
 ```
@@ -95,7 +100,7 @@ The application uses `class-validator` for environment variable validation at st
 
 | Variable | Description | Default |
 | :--- | :--- | :--- |
-| `PORT` | Application port | `3000` |
+| `PORT` | Application port | `3001` |
 | `NODE_ENV` | Application environment | `development` |
 | `DB_URL` | PostgreSQL connection string | *required* |
 | `CACHE_HOST` | Redis host | *required* |
@@ -444,7 +449,7 @@ This is a template repository. Fork it and customize it for your needs!
 
 ## 📄 License
 
-Veritas is [UNLICENSED](LICENSE).
+Veritas is UNLICENSED.
 
 ---
 
