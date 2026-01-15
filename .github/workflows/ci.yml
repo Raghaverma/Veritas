@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Run tests
+        run: yarn test
+        env:
+          NODE_ENV: test
+          PORT: 3000
+          DB_URL: postgres://user:pass@localhost:5432/db
+          CACHE_HOST: localhost
+          CACHE_PORT: 6379
+          FIREBASE_CLIENT_EMAIL: test@test.com
+          FIREBASE_PRIVATE_KEY: "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCi\n-----END PRIVATE KEY-----\n"
+          FIREBASE_PROJECT_ID: test-project
+
+      - name: Build
+        run: yarn build
+        env:
+          # Providing env vars in case nest build / sentry injection triggers config validation
+          NODE_ENV: production
+          DB_URL: postgres://user:pass@localhost:5432/db
+          CACHE_HOST: localhost
+          FIREBASE_CLIENT_EMAIL: test@test.com
+          FIREBASE_PRIVATE_KEY: "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCi\n-----END PRIVATE KEY-----\n"
+          FIREBASE_PROJECT_ID: test-project
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
