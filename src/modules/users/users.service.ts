@@ -14,10 +14,12 @@ export class UsersService {
       return { user: existingUser };
     }
 
-    return this.usersRepo
-      .createUser(user.id, createUserDto)
-      .then((createdUser) => {
-        return { user: createdUser };
-      });
+    const createdUser = await this.usersRepo.createUser(
+      user.id,
+      user.email,
+      createUserDto.name,
+    );
+
+    return { user: createdUser };
   }
 }

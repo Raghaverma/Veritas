@@ -1,28 +1,47 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
-import { Request } from 'express';
-import { logger } from '../utils/logger';
-// import { v7 as uuidv7 } from 'uuid';
+/**
+ * Logger Middleware
+ *
+ * Logs incoming HTTP requests with structured data.
+ * Includes correlation ID for request tracing.
+ */
+
+import { Injectable, NestMiddleware, Logger } from '@nestjs/common';
+import { Request, Response, NextFunction } from 'express';
+import { v7 as uuidv7 } from 'uuid';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
-  use(req: Request, res: any, next: () => void) {
-    const reqId = 'uuidv7()';
+  private readonly logger = new Logger('HTTP');
 
-    // Parse the raw request to access Fastify-specific properties
+  use(req: Request, res: Response, next: NextFunction): void {
+    const correlationId =
+      (req.headers['x-correlation-id'] as string) ?? uuidv7();
+    const startTime = Date.now();
 
-    logger.log(`-------Begin Request ${reqId}-------`);
-    logger.log('Headers', req.headers);
-    logger.log('Body', req.body);
+    req.headers['x-correlation-id'] = correlationId;
 
-    // Fastify uses slightly different properties for path info
-    logger.log('Path', req.url);
-    logger.log('Method', req.method);
+    this.logger.log({
+      message: 'Incoming request',
+      correlationId,
+      method: req.method,
+      path: req.url,
+      userAgent: req.headers['user-agent'],
+      ip: req.ip,
+    });
 
-    // Params and query are accessed differently in Fastify
-    logger.log('Params', req.params);
-    logger.log('Query', req.query);
+    res.on('finish', () => {
+      const duration = Date.now() - startTime;
 
-    logger.log(`-------End Request ${reqId}-------`);
+      this.logger.log({
+        message: 'Request completed',
+        correlationId,
+        method: req.method,
+        path: req.url,
+        statusCode: res.statusCode,
+        durationMs: duration,
+      });
+    });
+
     next();
   }
 }
