@@ -28,10 +28,7 @@ import { IEventHandler, IDomainEvent } from '../shared/types/event.types';
       name: DOMAIN_EVENTS_QUEUE,
     }),
   ],
-  providers: [
-    DomainEventsProcessor,
-    EventHandlerRegistry,
-  ],
+  providers: [DomainEventsProcessor, EventHandlerRegistry],
   exports: [EventHandlerRegistry],
 })
 export class WorkersModule implements OnModuleInit {

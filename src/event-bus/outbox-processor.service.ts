@@ -18,7 +18,12 @@
  * - Dead events (max retries exceeded) are moved to 'failed' status
  */
 
-import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  OnModuleInit,
+  OnModuleDestroy,
+} from '@nestjs/common';
 import { Queue } from 'bullmq';
 import { InjectQueue } from '@nestjs/bullmq';
 import { DrizzleService } from '../helpers/drizzle/drizzle.service';
@@ -148,20 +153,24 @@ export class OutboxProcessorService implements OnModuleInit, OnModuleDestroy {
    */
   private async processEvent(outboxEntry: EventOutboxEntry): Promise<void> {
     try {
-      await this.eventsQueue.add(outboxEntry.eventType, {
-        eventId: outboxEntry.eventId,
-        eventType: outboxEntry.eventType,
-        aggregateType: outboxEntry.aggregateType,
-        aggregateId: outboxEntry.aggregateId,
-        payload: outboxEntry.payload,
-      }, {
-        jobId: outboxEntry.eventId,
-        attempts: 3,
-        backoff: {
-          type: 'exponential',
-          delay: 1000,
+      await this.eventsQueue.add(
+        outboxEntry.eventType,
+        {
+          eventId: outboxEntry.eventId,
+          eventType: outboxEntry.eventType,
+          aggregateType: outboxEntry.aggregateType,
+          aggregateId: outboxEntry.aggregateId,
+          payload: outboxEntry.payload,
         },
-      });
+        {
+          jobId: outboxEntry.eventId,
+          attempts: 3,
+          backoff: {
+            type: 'exponential',
+            delay: 1000,
+          },
+        },
+      );
 
       await this.markCompleted(outboxEntry.id);
 
@@ -203,7 +212,8 @@ export class OutboxProcessorService implements OnModuleInit, OnModuleDestroy {
     error: unknown,
   ): Promise<void> {
     const newRetryCount = outboxEntry.retryCount + 1;
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error';
 
     if (newRetryCount >= outboxEntry.maxRetries) {
       await this.drizzleService.db

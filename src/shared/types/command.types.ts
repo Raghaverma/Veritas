@@ -75,7 +75,8 @@ export const CommandErrorCodes = {
   OPTIMISTIC_LOCK_FAILED: 'OPTIMISTIC_LOCK_FAILED',
 } as const;
 
-export type CommandErrorCode = (typeof CommandErrorCodes)[keyof typeof CommandErrorCodes];
+export type CommandErrorCode =
+  (typeof CommandErrorCodes)[keyof typeof CommandErrorCodes];
 
 /**
  * Interface for command handlers.
@@ -101,7 +102,9 @@ export function commandSuccess<T>(data: T): CommandResult<T, never> {
 /**
  * Helper function to create a failed command result.
  */
-export function commandFailure<E extends CommandError>(error: E): CommandResult<never, E> {
+export function commandFailure<E extends CommandError>(
+  error: E,
+): CommandResult<never, E> {
   return { success: false, error };
 }
 

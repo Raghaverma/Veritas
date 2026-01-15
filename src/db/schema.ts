@@ -34,9 +34,18 @@ import {
 // ENUMS
 // ============================================================================
 
-export const statusType = pgEnum('status_type', ['active', 'inactive', 'suspended']);
+export const statusType = pgEnum('status_type', [
+  'active',
+  'inactive',
+  'suspended',
+]);
 
-export const outboxStatus = pgEnum('outbox_status', ['pending', 'processing', 'completed', 'failed']);
+export const outboxStatus = pgEnum('outbox_status', [
+  'pending',
+  'processing',
+  'completed',
+  'failed',
+]);
 
 export const actionType = pgEnum('action_type', [
   'create',
@@ -47,7 +56,12 @@ export const actionType = pgEnum('action_type', [
   'custom',
 ]);
 
-export const policyStatus = pgEnum('policy_status', ['draft', 'active', 'suspended', 'revoked']);
+export const policyStatus = pgEnum('policy_status', [
+  'draft',
+  'active',
+  'suspended',
+  'revoked',
+]);
 
 // ============================================================================
 // HELPER FUNCTIONS
@@ -78,8 +92,12 @@ export const users = pgTable(
     name: varchar('name'),
     status: statusType('status').default('active').notNull(),
     version: integer('version').default(1).notNull(),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true })
+      .defaultNow()
+      .notNull(),
   },
   (table) => [
     index('users_email_idx').on(lower(table.email)),
@@ -105,8 +123,12 @@ export const actions = pgTable(
     status: statusType('status').default('active').notNull(),
     metadata: jsonb('metadata').$type<Record<string, unknown>>(),
     version: integer('version').default(1).notNull(),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true })
+      .defaultNow()
+      .notNull(),
     completedAt: timestamp('completed_at', { withTimezone: true }),
   },
   (table) => [
@@ -133,8 +155,12 @@ export const policies = pgTable(
     rules: jsonb('rules').$type<Record<string, unknown>>().notNull(),
     status: policyStatus('status').default('draft').notNull(),
     version: integer('version').default(1).notNull(),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true })
+      .defaultNow()
+      .notNull(),
     activatedAt: timestamp('activated_at', { withTimezone: true }),
     suspendedAt: timestamp('suspended_at', { withTimezone: true }),
     suspensionReason: text('suspension_reason'),
@@ -188,10 +214,15 @@ export const domainEvents = pgTable(
         version: number;
       }>()
       .notNull(),
-    occurredAt: timestamp('occurred_at', { withTimezone: true }).defaultNow().notNull(),
+    occurredAt: timestamp('occurred_at', { withTimezone: true })
+      .defaultNow()
+      .notNull(),
   },
   (table) => [
-    index('domain_events_aggregate_idx').on(table.aggregateType, table.aggregateId),
+    index('domain_events_aggregate_idx').on(
+      table.aggregateType,
+      table.aggregateId,
+    ),
     index('domain_events_event_type_idx').on(table.eventType),
     index('domain_events_occurred_at_idx').on(table.occurredAt),
     index('domain_events_correlation_idx').using(
@@ -235,7 +266,9 @@ export const eventOutbox = pgTable(
     retryCount: integer('retry_count').default(0).notNull(),
     maxRetries: integer('max_retries').default(5).notNull(),
     lastError: text('last_error'),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .defaultNow()
+      .notNull(),
     processedAt: timestamp('processed_at', { withTimezone: true }),
     nextRetryAt: timestamp('next_retry_at', { withTimezone: true }),
   },
@@ -277,11 +310,20 @@ export const auditLog = pgTable(
     actorEmail: varchar('actor_email', { length: 255 }).notNull(),
     actorIp: varchar('actor_ip', { length: 45 }),
     actorUserAgent: text('actor_user_agent'),
-    beforeSnapshot: jsonb('before_snapshot').$type<Record<string, unknown> | null>(),
-    afterSnapshot: jsonb('after_snapshot').$type<Record<string, unknown> | null>(),
-    changes: jsonb('changes').$type<Record<string, { from: unknown; to: unknown }>>(),
+    beforeSnapshot: jsonb('before_snapshot').$type<Record<
+      string,
+      unknown
+    > | null>(),
+    afterSnapshot: jsonb('after_snapshot').$type<Record<
+      string,
+      unknown
+    > | null>(),
+    changes:
+      jsonb('changes').$type<Record<string, { from: unknown; to: unknown }>>(),
     metadata: jsonb('metadata').$type<Record<string, unknown>>(),
-    occurredAt: timestamp('occurred_at', { withTimezone: true }).defaultNow().notNull(),
+    occurredAt: timestamp('occurred_at', { withTimezone: true })
+      .defaultNow()
+      .notNull(),
   },
   (table) => [
     index('audit_log_entity_idx').on(table.entityType, table.entityId),
@@ -311,9 +353,14 @@ export const processedEvents = pgTable(
     id: uuid('id').primaryKey().defaultRandom(),
     eventId: uuid('event_id').notNull(),
     handlerName: varchar('handler_name', { length: 100 }).notNull(),
-    processedAt: timestamp('processed_at', { withTimezone: true }).defaultNow().notNull(),
+    processedAt: timestamp('processed_at', { withTimezone: true })
+      .defaultNow()
+      .notNull(),
   },
   (table) => [
-    index('processed_events_event_handler_idx').on(table.eventId, table.handlerName),
+    index('processed_events_event_handler_idx').on(
+      table.eventId,
+      table.handlerName,
+    ),
   ],
 );

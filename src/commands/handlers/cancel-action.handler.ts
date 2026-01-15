@@ -14,10 +14,7 @@ import {
   createCommandError,
   CommandErrorCodes,
 } from '../../shared/types/command.types';
-import {
-  CancelActionCommand,
-  ActionCommandTypes,
-} from '../action.commands';
+import { CancelActionCommand, ActionCommandTypes } from '../action.commands';
 import { ActionsRepo } from '../../repositories/actions.repo';
 
 export interface CancelActionResult {
@@ -28,14 +25,17 @@ export interface CancelActionResult {
 
 @Injectable()
 @CommandHandler(ActionCommandTypes.CANCEL_ACTION)
-export class CancelActionHandler
-  implements ICommandHandler<CancelActionCommand, CancelActionResult>
-{
+export class CancelActionHandler implements ICommandHandler<
+  CancelActionCommand,
+  CancelActionResult
+> {
   private readonly logger = new Logger(CancelActionHandler.name);
 
-  constructor(private readonly actionsRepo: ActionsRepo) {}
+  constructor(private readonly actionsRepo: ActionsRepo) { }
 
-  async execute(command: CancelActionCommand): Promise<CommandResult<CancelActionResult>> {
+  async execute(
+    command: CancelActionCommand,
+  ): Promise<CommandResult<CancelActionResult>> {
     const { payload, metadata } = command;
 
     this.logger.debug({
@@ -55,22 +55,23 @@ export class CancelActionHandler
       );
     }
 
-    const result = aggregate.cancel(
-      payload.reason,
-      payload.expectedVersion,
-      {
-        correlationId: metadata.correlationId,
-        causationId: metadata.causationId,
-        actor: metadata.actor,
-        timestamp: metadata.timestamp.toISOString(),
-      },
-    );
+    const result = aggregate.cancel(payload.reason, payload.expectedVersion, {
+      correlationId: metadata.correlationId,
+      causationId: metadata.causationId,
+      actor: metadata.actor,
+      timestamp: metadata.timestamp.toISOString(),
+    });
 
     if (result.success === false) {
-      const err = result.error as { code: string; message: string; rule?: string; details?: Record<string, unknown> };
+      const err = result.error as {
+        code: string;
+        message: string;
+        rule?: string;
+        details?: Record<string, unknown>;
+      };
       const errorCode =
         err.code === 'BUSINESS_RULE_VIOLATION' &&
-        err.rule === 'action.version.mismatch'
+          err.rule === 'action.version.mismatch'
           ? CommandErrorCodes.OPTIMISTIC_LOCK_FAILED
           : CommandErrorCodes.BUSINESS_RULE_VIOLATION;
 
@@ -82,7 +83,10 @@ export class CancelActionHandler
       );
     }
 
-    await this.actionsRepo.update(aggregate, result.events, payload.expectedVersion);
+    await this.actionsRepo.update(
+      aggregate,
+      result.events,
+    );
 
     this.logger.log({
       message: 'Action cancelled successfully',

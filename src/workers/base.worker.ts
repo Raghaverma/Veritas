@@ -63,9 +63,7 @@ export abstract class BaseDomainEventWorker {
   /**
    * Process the event. Implement this in concrete workers.
    */
-  protected abstract processEvent(
-    job: Job<DomainEventJobData>,
-  ): Promise<void>;
+  protected abstract processEvent(job: Job<DomainEventJobData>): Promise<void>;
 
   /**
    * Check if this handler should process the event.
@@ -80,7 +78,8 @@ export abstract class BaseDomainEventWorker {
    * Handles idempotency, logging, and error handling.
    */
   async handleJob(job: Job<DomainEventJobData>): Promise<void> {
-    const { eventId, eventType, aggregateType, aggregateId, payload } = job.data;
+    const { eventId, eventType, aggregateType, aggregateId, payload } =
+      job.data;
     const handlerName = this.getHandlerName();
 
     if (!this.shouldProcess(job)) {
@@ -104,7 +103,10 @@ export abstract class BaseDomainEventWorker {
     }
 
     const correlationId = payload.metadata?.correlationId ?? eventId;
-    const actor = payload.metadata?.actor ?? { id: 'system', email: 'system@internal' };
+    const actor = payload.metadata?.actor ?? {
+      id: 'system',
+      email: 'system@internal',
+    };
 
     const context = RequestContext.createBackgroundContext({
       correlationId,

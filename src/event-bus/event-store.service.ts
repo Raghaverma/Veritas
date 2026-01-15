@@ -24,7 +24,9 @@ import { NewDomainEvent, NewEventOutboxEntry } from '../db/types';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '../db/schema';
 
-type DrizzleTransaction = Parameters<Parameters<PostgresJsDatabase<typeof schema>['transaction']>[0]>[0];
+type DrizzleTransaction = Parameters<
+  Parameters<PostgresJsDatabase<typeof schema>['transaction']>[0]
+>[0];
 
 @Injectable()
 export class EventStoreService {
@@ -129,7 +131,12 @@ export class EventStoreService {
    * This allows other services to include event persistence in their transactions.
    */
   async withTransaction<T>(
-    callback: (tx: DrizzleTransaction, persistEvents: (events: IDomainEvent[]) => Promise<{ eventIds: string[] }>) => Promise<T>,
+    callback: (
+      tx: DrizzleTransaction,
+      persistEvents: (
+        events: IDomainEvent[],
+      ) => Promise<{ eventIds: string[] }>,
+    ) => Promise<T>,
   ): Promise<T> {
     return this.drizzleService.db.transaction(async (tx) => {
       const persistEvents = (events: IDomainEvent[]) =>

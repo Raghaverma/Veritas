@@ -17,15 +17,15 @@ import { PolicyAuditHandler } from '../../workers/handlers/policy-audit.handler'
 import { AuditModule } from '../../audit/audit.module';
 
 @Module({
-    imports: [AuditModule],
-    providers: [
-        CreatePolicyHandler,
-        ActivatePolicyHandler,
-        SuspendPolicyHandler,
-        ResumePolicyHandler,
-        RevokePolicyHandler,
-        PolicyAuditHandler,
-    ],
-    exports: [],
+  imports: [AuditModule],
+  providers: [
+    CreatePolicyHandler,
+    ActivatePolicyHandler,
+    SuspendPolicyHandler,
+    ResumePolicyHandler,
+    RevokePolicyHandler,
+    PolicyAuditHandler,
+  ],
+  exports: [],
 })
-export class PoliciesModule { }
+export class PoliciesModule {}

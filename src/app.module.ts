@@ -92,11 +92,7 @@ import { ActionsModule } from './api/actions/actions.module';
     ActionsModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    FirebaseService,
-    DrizzleHealthIndicator,
-  ],
+  providers: [AppService, FirebaseService, DrizzleHealthIndicator],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer): void {

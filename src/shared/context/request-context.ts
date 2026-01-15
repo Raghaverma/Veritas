@@ -79,7 +79,9 @@ export class RequestContext {
   static currentOrFail(): IRequestContext {
     const context = asyncLocalStorage.getStore();
     if (!context) {
-      throw new Error('RequestContext is not available. Ensure this code runs within a request context.');
+      throw new Error(
+        'RequestContext is not available. Ensure this code runs within a request context.',
+      );
     }
     return context;
   }

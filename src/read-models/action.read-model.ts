@@ -19,8 +19,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { DrizzleService } from '../helpers/drizzle/drizzle.service';
 import { CacheService } from '../helpers/cache/cache.service';
-import { actions, users, domainEvents, auditLog } from '../db/schema';
-import { Action, User, DomainEvent } from '../db/types';
+import { actions, users, domainEvents } from '../db/schema';
+import { DomainEvent } from '../db/types';
 import { eq, desc, and, sql, gte, lte, or, like } from 'drizzle-orm';
 
 /**
@@ -90,14 +90,17 @@ export class ActionReadModel {
   constructor(
     private readonly drizzleService: DrizzleService,
     private readonly cacheService: CacheService,
-  ) {}
+  ) { }
 
   /**
    * Get a single action with full details.
    */
   async getActionById(actionId: string): Promise<ActionDetailView | null> {
     const cacheKey = `action:detail:${actionId}`;
-    const cached = await this.cacheService.get<ActionDetailView>(cacheKey, true);
+    const cached = await this.cacheService.get<ActionDetailView>(
+      cacheKey,
+      true,
+    );
 
     if (cached) {
       return cached;

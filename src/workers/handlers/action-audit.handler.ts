@@ -116,7 +116,9 @@ export class ActionAuditHandler implements IEventHandler<IDomainEvent> {
         return {
           beforeSnapshot: null,
           afterSnapshot: null,
-          changes: payload.changes as Record<string, { from: unknown; to: unknown }> | undefined,
+          changes: payload.changes as
+            | Record<string, { from: unknown; to: unknown }>
+            | undefined,
         };
 
       case ActionEventTypes.ACTION_COMPLETED:

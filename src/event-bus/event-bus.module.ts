@@ -17,7 +17,10 @@
 import { Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bullmq';
 import { EventStoreService } from './event-store.service';
-import { OutboxProcessorService, DOMAIN_EVENTS_QUEUE } from './outbox-processor.service';
+import {
+  OutboxProcessorService,
+  DOMAIN_EVENTS_QUEUE,
+} from './outbox-processor.service';
 
 @Module({
   imports: [

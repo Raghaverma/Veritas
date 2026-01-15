@@ -38,7 +38,10 @@ import { CommandBus, CommandFactory } from '../../commands';
 import { ActionCommandTypes } from '../../commands/action.commands';
 import { ActionReadModel } from '../../read-models/action.read-model';
 import { AuditService } from '../../audit/audit.service';
-import { GetAuthenticatedUser, AuthenticatedUser } from '../../middlewares/auth.middleware';
+import {
+  GetAuthenticatedUser,
+  AuthenticatedUser,
+} from '../../middlewares/auth.middleware';
 import { RequestContext } from '../../shared/context/request-context';
 import { CommandErrorCodes } from '../../shared/types/command.types';
 import {
@@ -95,7 +98,10 @@ export class ActionsController {
       metadata: dto.metadata,
     });
 
-    const result = await this.commandBus.execute<{ actionId: string; version: number }>(command);
+    const result = await this.commandBus.execute<{
+      actionId: string;
+      version: number;
+    }>(command);
 
     if (result.success === false) {
       throw this.mapErrorToException(result.error);
@@ -129,7 +135,10 @@ export class ActionsController {
       expectedVersion: dto.expectedVersion,
     });
 
-    const result = await this.commandBus.execute<{ actionId: string; version: number }>(command);
+    const result = await this.commandBus.execute<{
+      actionId: string;
+      version: number;
+    }>(command);
 
     if (result.success === false) {
       throw this.mapErrorToException(result.error);
@@ -336,7 +345,10 @@ export class ActionsController {
   /**
    * Map command errors to HTTP exceptions.
    */
-  private mapErrorToException(error: { code: string; message: string }): HttpException {
+  private mapErrorToException(error: {
+    code: string;
+    message: string;
+  }): HttpException {
     switch (error.code) {
       case CommandErrorCodes.NOT_FOUND:
         return new HttpException(error.message, HttpStatus.NOT_FOUND);
@@ -350,9 +362,15 @@ export class ActionsController {
       case CommandErrorCodes.FORBIDDEN:
         return new HttpException(error.message, HttpStatus.FORBIDDEN);
       case CommandErrorCodes.BUSINESS_RULE_VIOLATION:
-        return new HttpException(error.message, HttpStatus.UNPROCESSABLE_ENTITY);
+        return new HttpException(
+          error.message,
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
       default:
-        return new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new HttpException(
+          error.message,
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
     }
   }
 }

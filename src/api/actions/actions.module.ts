@@ -26,12 +26,7 @@ import { AuditModule } from '../../audit/audit.module';
 import { ReadModelsModule } from '../../read-models/read-models.module';
 
 @Module({
-  imports: [
-    CommandsModule,
-    EventBusModule,
-    AuditModule,
-    ReadModelsModule,
-  ],
+  imports: [CommandsModule, EventBusModule, AuditModule, ReadModelsModule],
   controllers: [ActionsController],
   providers: [
     ActionsRepo,

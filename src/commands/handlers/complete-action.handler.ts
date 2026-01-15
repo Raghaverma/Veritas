@@ -14,10 +14,7 @@ import {
   createCommandError,
   CommandErrorCodes,
 } from '../../shared/types/command.types';
-import {
-  CompleteActionCommand,
-  ActionCommandTypes,
-} from '../action.commands';
+import { CompleteActionCommand, ActionCommandTypes } from '../action.commands';
 import { ActionsRepo } from '../../repositories/actions.repo';
 
 export interface CompleteActionResult {
@@ -28,14 +25,17 @@ export interface CompleteActionResult {
 
 @Injectable()
 @CommandHandler(ActionCommandTypes.COMPLETE_ACTION)
-export class CompleteActionHandler
-  implements ICommandHandler<CompleteActionCommand, CompleteActionResult>
-{
+export class CompleteActionHandler implements ICommandHandler<
+  CompleteActionCommand,
+  CompleteActionResult
+> {
   private readonly logger = new Logger(CompleteActionHandler.name);
 
-  constructor(private readonly actionsRepo: ActionsRepo) {}
+  constructor(private readonly actionsRepo: ActionsRepo) { }
 
-  async execute(command: CompleteActionCommand): Promise<CommandResult<CompleteActionResult>> {
+  async execute(
+    command: CompleteActionCommand,
+  ): Promise<CommandResult<CompleteActionResult>> {
     const { payload, metadata } = command;
 
     this.logger.debug({
@@ -55,22 +55,23 @@ export class CompleteActionHandler
       );
     }
 
-    const result = aggregate.complete(
-      payload.result,
-      payload.expectedVersion,
-      {
-        correlationId: metadata.correlationId,
-        causationId: metadata.causationId,
-        actor: metadata.actor,
-        timestamp: metadata.timestamp.toISOString(),
-      },
-    );
+    const result = aggregate.complete(payload.result, payload.expectedVersion, {
+      correlationId: metadata.correlationId,
+      causationId: metadata.causationId,
+      actor: metadata.actor,
+      timestamp: metadata.timestamp.toISOString(),
+    });
 
     if (result.success === false) {
-      const err = result.error as { code: string; message: string; rule?: string; details?: Record<string, unknown> };
+      const err = result.error as {
+        code: string;
+        message: string;
+        rule?: string;
+        details?: Record<string, unknown>;
+      };
       const errorCode =
         err.code === 'BUSINESS_RULE_VIOLATION' &&
-        err.rule === 'action.version.mismatch'
+          err.rule === 'action.version.mismatch'
           ? CommandErrorCodes.OPTIMISTIC_LOCK_FAILED
           : CommandErrorCodes.BUSINESS_RULE_VIOLATION;
 
@@ -82,7 +83,10 @@ export class CompleteActionHandler
       );
     }
 
-    await this.actionsRepo.update(aggregate, result.events, payload.expectedVersion);
+    await this.actionsRepo.update(
+      aggregate,
+      result.events,
+    );
 
     this.logger.log({
       message: 'Action completed successfully',
@@ -93,7 +97,8 @@ export class CompleteActionHandler
     return commandSuccess({
       actionId: aggregate.id,
       version: aggregate.version,
-      completedAt: aggregate.completedAt?.toISOString() ?? new Date().toISOString(),
+      completedAt:
+        aggregate.completedAt?.toISOString() ?? new Date().toISOString(),
     });
   }
 }

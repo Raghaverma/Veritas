@@ -11,7 +11,11 @@
  */
 
 import { Module, OnModuleInit, Type } from '@nestjs/common';
-import { DiscoveryModule, DiscoveryService, MetadataScanner } from '@nestjs/core';
+import {
+  DiscoveryModule,
+  DiscoveryService,
+  MetadataScanner,
+} from '@nestjs/core';
 import {
   CommandBus,
   CommandHandlerRegistry,
@@ -21,10 +25,7 @@ import { ICommandHandler, ICommand } from '../shared/types/command.types';
 
 @Module({
   imports: [DiscoveryModule],
-  providers: [
-    CommandBus,
-    CommandHandlerRegistry,
-  ],
+  providers: [CommandBus, CommandHandlerRegistry],
   exports: [CommandBus, CommandHandlerRegistry],
 })
 export class CommandsModule implements OnModuleInit {

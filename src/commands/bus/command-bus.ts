@@ -51,16 +51,24 @@ export function CommandHandler(commandType: string): ClassDecorator {
  */
 @Injectable()
 export class CommandHandlerRegistry {
-  private handlers = new Map<string, Type<ICommandHandler<ICommand, unknown>>>();
+  private handlers = new Map<
+    string,
+    Type<ICommandHandler<ICommand, unknown>>
+  >();
   private readonly logger = new Logger(CommandHandlerRegistry.name);
 
   /**
    * Register a handler for a command type.
    * Called during application bootstrap.
    */
-  register(commandType: string, handler: Type<ICommandHandler<ICommand, unknown>>): void {
+  register(
+    commandType: string,
+    handler: Type<ICommandHandler<ICommand, unknown>>,
+  ): void {
     if (this.handlers.has(commandType)) {
-      this.logger.warn(`Handler for command type '${commandType}' is being overwritten`);
+      this.logger.warn(
+        `Handler for command type '${commandType}' is being overwritten`,
+      );
     }
     this.handlers.set(commandType, handler);
     this.logger.log(`Registered handler for command type: ${commandType}`);
@@ -69,7 +77,9 @@ export class CommandHandlerRegistry {
   /**
    * Get the handler class for a command type.
    */
-  getHandler(commandType: string): Type<ICommandHandler<ICommand, unknown>> | undefined {
+  getHandler(
+    commandType: string,
+  ): Type<ICommandHandler<ICommand, unknown>> | undefined {
     return this.handlers.get(commandType);
   }
 
@@ -161,7 +171,9 @@ export class CommandBus {
       return commandFailure(
         createCommandError(
           CommandErrorCodes.INTERNAL_ERROR,
-          error instanceof Error ? error.message : 'An unexpected error occurred',
+          error instanceof Error
+            ? error.message
+            : 'An unexpected error occurred',
         ),
       );
     }
@@ -176,10 +188,7 @@ export class CommandFactory {
   /**
    * Create a command with metadata from the current request context.
    */
-  static create<TPayload>(
-    type: string,
-    payload: TPayload,
-  ): ICommand<TPayload> {
+  static create<TPayload>(type: string, payload: TPayload): ICommand<TPayload> {
     const context = RequestContext.currentOrFail();
 
     const metadata: CommandMetadata = {

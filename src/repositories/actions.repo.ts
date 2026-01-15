@@ -20,11 +20,11 @@ import { Injectable, Logger } from '@nestjs/common';
 import { DrizzleService } from '../helpers/drizzle/drizzle.service';
 import { EventStoreService } from '../event-bus/event-store.service';
 import { actions } from '../db/schema';
-import { Action, NewAction } from '../db/types';
+import { Action } from '../db/types';
 import { ActionAggregate } from '../domain/aggregates/action.aggregate';
 import { IDomainEvent } from '../shared/types/event.types';
 import { eq } from 'drizzle-orm';
-import { EntityNotFoundError, ConcurrencyError } from '../shared/errors/domain.errors';
+import { EntityNotFoundError } from '../shared/errors/domain.errors';
 
 @Injectable()
 export class ActionsRepo {
@@ -130,7 +130,6 @@ export class ActionsRepo {
   async update(
     aggregate: ActionAggregate,
     events: IDomainEvent[],
-    expectedVersion: number,
   ): Promise<Action> {
     return this.eventStore.withTransaction(async (tx, persistEvents) => {
       const state = aggregate.toState();

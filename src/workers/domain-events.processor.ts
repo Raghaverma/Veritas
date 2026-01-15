@@ -16,7 +16,7 @@
 
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Injectable, Logger, Type } from '@nestjs/common';
-import { ModuleRef, DiscoveryService } from '@nestjs/core';
+import { ModuleRef } from '@nestjs/core';
 import { Job } from 'bullmq';
 import { DOMAIN_EVENTS_QUEUE } from '../event-bus/outbox-processor.service';
 import { DomainEventJobData } from './base.worker';
@@ -53,11 +53,16 @@ export class EventHandlerRegistry {
   /**
    * Register a handler for an event type.
    */
-  register(eventType: string, handler: Type<IEventHandler<IDomainEvent>>): void {
+  register(
+    eventType: string,
+    handler: Type<IEventHandler<IDomainEvent>>,
+  ): void {
     const existing = this.handlers.get(eventType) ?? [];
     existing.push(handler);
     this.handlers.set(eventType, existing);
-    this.logger.log(`Registered handler ${handler.name} for event type: ${eventType}`);
+    this.logger.log(
+      `Registered handler ${handler.name} for event type: ${eventType}`,
+    );
   }
 
   /**
@@ -94,10 +99,14 @@ export class DomainEventsProcessor extends WorkerHost {
    * Process a job from the queue.
    */
   async process(job: Job<DomainEventJobData>): Promise<void> {
-    const { eventId, eventType, aggregateType, aggregateId, payload } = job.data;
+    const { eventId, eventType, aggregateType, aggregateId, payload } =
+      job.data;
 
     const correlationId = payload.metadata?.correlationId ?? eventId;
-    const actor = payload.metadata?.actor ?? { id: 'system', email: 'system@internal' };
+    const actor = payload.metadata?.actor ?? {
+      id: 'system',
+      email: 'system@internal',
+    };
 
     const context = RequestContext.createBackgroundContext({
       correlationId,
@@ -147,7 +156,8 @@ export class DomainEventsProcessor extends WorkerHost {
       );
 
       const failures = results.filter(
-        (result): result is PromiseRejectedResult => result.status === 'rejected',
+        (result): result is PromiseRejectedResult =>
+          result.status === 'rejected',
       );
 
       if (failures.length > 0) {
@@ -225,7 +235,10 @@ export class DomainEventsProcessor extends WorkerHost {
   /**
    * Check if an event has already been processed by a handler.
    */
-  private async isAlreadyProcessed(eventId: string, handlerName: string): Promise<boolean> {
+  private async isAlreadyProcessed(
+    eventId: string,
+    handlerName: string,
+  ): Promise<boolean> {
     const result = await this.drizzleService.db
       .select({ id: processedEvents.id })
       .from(processedEvents)
@@ -243,10 +256,16 @@ export class DomainEventsProcessor extends WorkerHost {
   /**
    * Mark an event as processed by a handler.
    */
-  private async markAsProcessed(eventId: string, handlerName: string): Promise<void> {
-    await this.drizzleService.db.insert(processedEvents).values({
-      eventId,
-      handlerName,
-    }).onConflictDoNothing();
+  private async markAsProcessed(
+    eventId: string,
+    handlerName: string,
+  ): Promise<void> {
+    await this.drizzleService.db
+      .insert(processedEvents)
+      .values({
+        eventId,
+        handlerName,
+      })
+      .onConflictDoNothing();
   }
 }

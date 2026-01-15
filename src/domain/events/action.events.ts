@@ -15,7 +15,12 @@
  * - Do not include sensitive data that shouldn't be logged
  */
 
-import { IDomainEvent, EventMetadata, createEventFactory, AggregateTypes } from '../../shared/types/event.types';
+import {
+  IDomainEvent,
+  EventMetadata,
+  createEventFactory,
+  AggregateTypes,
+} from '../../shared/types/event.types';
 import { ActionType, StatusType } from '../../db/types';
 
 // ============================================================================
@@ -32,7 +37,8 @@ export const ActionEventTypes = {
   ACTION_ACTIVATED: 'action.activated',
 } as const;
 
-export type ActionEventType = (typeof ActionEventTypes)[keyof typeof ActionEventTypes];
+export type ActionEventType =
+  (typeof ActionEventTypes)[keyof typeof ActionEventTypes];
 
 // ============================================================================
 // EVENT PAYLOADS
@@ -56,7 +62,10 @@ export interface ActionUpdatedPayload {
   changes: {
     name?: { from: string; to: string };
     description?: { from: string | null; to: string | null };
-    metadata?: { from: Record<string, unknown> | null; to: Record<string, unknown> | null };
+    metadata?: {
+      from: Record<string, unknown> | null;
+      to: Record<string, unknown> | null;
+    };
   };
   newVersion: number;
   updatedAt: string;

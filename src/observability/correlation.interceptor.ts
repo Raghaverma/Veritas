@@ -20,7 +20,11 @@ import {
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Request, Response } from 'express';
-import { RequestContext, IRequestContext, Actor } from '../shared/context/request-context';
+import {
+  RequestContext,
+  IRequestContext,
+  Actor,
+} from '../shared/context/request-context';
 import { v7 as uuidv7 } from 'uuid';
 
 const CORRELATION_ID_HEADER = 'x-correlation-id';
@@ -30,7 +34,9 @@ const REQUEST_ID_HEADER = 'x-request-id';
 export class CorrelationInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const ctx = context.switchToHttp();
-    const request = ctx.getRequest<Request & { user?: { id: string; email: string; accountId?: string } }>();
+    const request = ctx.getRequest<
+      Request & { user?: { id: string; email: string; accountId?: string } }
+    >();
     const response = ctx.getResponse<Response>();
 
     const correlationId =

@@ -84,7 +84,9 @@ export class UpdateActionDto {
 }
 
 export class CompleteActionDto {
-  @ApiPropertyOptional({ description: 'Result data from completing the action' })
+  @ApiPropertyOptional({
+    description: 'Result data from completing the action',
+  })
   @IsObject()
   @IsOptional()
   result?: Record<string, unknown>;

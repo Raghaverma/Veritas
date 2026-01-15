@@ -27,10 +27,6 @@ import {
 import { EventMetadata } from '../../shared/types/event.types';
 import { ActionType, StatusType } from '../../db/types';
 import {
-  ActionCreatedEvent,
-  ActionUpdatedEvent,
-  ActionCompletedEvent,
-  ActionCancelledEvent,
   createActionCreatedEvent,
   createActionUpdatedEvent,
   createActionCompletedEvent,

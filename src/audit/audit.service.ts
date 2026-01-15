@@ -184,7 +184,9 @@ export class AuditService {
    * This shows all changes that happened as part of a single request.
    * Useful for debugging and understanding the impact of a request.
    */
-  async getAuditTrailByCorrelation(correlationId: string): Promise<AuditLogEntry[]> {
+  async getAuditTrailByCorrelation(
+    correlationId: string,
+  ): Promise<AuditLogEntry[]> {
     return this.drizzleService.db
       .select()
       .from(auditLog)

@@ -46,5 +46,11 @@ export type NewProcessedEvent = InferInsertModel<typeof processedEvents>;
 
 export type StatusType = 'active' | 'inactive' | 'suspended';
 export type OutboxStatus = 'pending' | 'processing' | 'completed' | 'failed';
-export type ActionType = 'create' | 'update' | 'delete' | 'suspend' | 'activate' | 'custom';
+export type ActionType =
+  | 'create'
+  | 'update'
+  | 'delete'
+  | 'suspend'
+  | 'activate'
+  | 'custom';
 export type PolicyStatus = 'draft' | 'active' | 'suspended' | 'revoked';

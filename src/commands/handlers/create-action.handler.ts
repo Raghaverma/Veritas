@@ -22,10 +22,7 @@ import {
   createCommandError,
   CommandErrorCodes,
 } from '../../shared/types/command.types';
-import {
-  CreateActionCommand,
-  ActionCommandTypes,
-} from '../action.commands';
+import { CreateActionCommand, ActionCommandTypes } from '../action.commands';
 import { ActionsRepo } from '../../repositories/actions.repo';
 import { ActionAggregate } from '../../domain/aggregates/action.aggregate';
 import { Action } from '../../db/types';
@@ -37,14 +34,17 @@ export interface CreateActionResult {
 
 @Injectable()
 @CommandHandler(ActionCommandTypes.CREATE_ACTION)
-export class CreateActionHandler
-  implements ICommandHandler<CreateActionCommand, CreateActionResult>
-{
+export class CreateActionHandler implements ICommandHandler<
+  CreateActionCommand,
+  CreateActionResult
+> {
   private readonly logger = new Logger(CreateActionHandler.name);
 
   constructor(private readonly actionsRepo: ActionsRepo) {}
 
-  async execute(command: CreateActionCommand): Promise<CommandResult<CreateActionResult>> {
+  async execute(
+    command: CreateActionCommand,
+  ): Promise<CommandResult<CreateActionResult>> {
     const { payload, metadata } = command;
 
     this.logger.debug({

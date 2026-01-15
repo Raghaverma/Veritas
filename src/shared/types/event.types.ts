@@ -117,5 +117,5 @@ export const AggregateTypes = {
   POLICY: 'Policy',
 } as const;
 
-export type AggregateType = (typeof AggregateTypes)[keyof typeof AggregateTypes];
-
+export type AggregateType =
+  (typeof AggregateTypes)[keyof typeof AggregateTypes];

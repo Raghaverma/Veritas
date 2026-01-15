@@ -35,7 +35,10 @@ export class UsersRepo {
     return created;
   }
 
-  async updateUser(id: string, data: Partial<Pick<User, 'name' | 'status'>>): Promise<User> {
+  async updateUser(
+    id: string,
+    data: Partial<Pick<User, 'name' | 'status'>>,
+  ): Promise<User> {
     await this.cacheService.hDel(
       this.cacheMapper.hgetUserById(id).key,
       this.cacheMapper.hgetUserById(id).field,
@@ -91,7 +94,11 @@ export class UsersRepo {
     return result[0] ?? null;
   }
 
-  async ensureUserExists(id: string, email: string, name?: string): Promise<User> {
+  async ensureUserExists(
+    id: string,
+    email: string,
+    name?: string,
+  ): Promise<User> {
     const existing = await this.getUserById(id, false);
 
     if (existing) {

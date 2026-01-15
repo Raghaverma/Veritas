@@ -99,14 +99,18 @@ export interface AggregateError {
 /**
  * Helper to create a successful aggregate result.
  */
-export function aggregateSuccess(events: IDomainEvent[]): AggregateResult<never> {
+export function aggregateSuccess(
+  events: IDomainEvent[],
+): AggregateResult<never> {
   return { success: true, events };
 }
 
 /**
  * Helper to create a failed aggregate result.
  */
-export function aggregateFailure<E extends AggregateError>(error: E): AggregateResult<E> {
+export function aggregateFailure<E extends AggregateError>(
+  error: E,
+): AggregateResult<E> {
   return { success: false, error };
 }
 

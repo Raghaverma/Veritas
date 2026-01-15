@@ -14,10 +14,7 @@ import {
   createCommandError,
   CommandErrorCodes,
 } from '../../shared/types/command.types';
-import {
-  UpdateActionCommand,
-  ActionCommandTypes,
-} from '../action.commands';
+import { UpdateActionCommand, ActionCommandTypes } from '../action.commands';
 import { ActionsRepo } from '../../repositories/actions.repo';
 import { EntityNotFoundError } from '../../shared/errors/domain.errors';
 
@@ -28,14 +25,17 @@ export interface UpdateActionResult {
 
 @Injectable()
 @CommandHandler(ActionCommandTypes.UPDATE_ACTION)
-export class UpdateActionHandler
-  implements ICommandHandler<UpdateActionCommand, UpdateActionResult>
-{
+export class UpdateActionHandler implements ICommandHandler<
+  UpdateActionCommand,
+  UpdateActionResult
+> {
   private readonly logger = new Logger(UpdateActionHandler.name);
 
-  constructor(private readonly actionsRepo: ActionsRepo) {}
+  constructor(private readonly actionsRepo: ActionsRepo) { }
 
-  async execute(command: UpdateActionCommand): Promise<CommandResult<UpdateActionResult>> {
+  async execute(
+    command: UpdateActionCommand,
+  ): Promise<CommandResult<UpdateActionResult>> {
     const { payload, metadata } = command;
 
     this.logger.debug({
@@ -71,10 +71,15 @@ export class UpdateActionHandler
     );
 
     if (result.success === false) {
-      const err = result.error as { code: string; message: string; rule?: string; details?: Record<string, unknown> };
+      const err = result.error as {
+        code: string;
+        message: string;
+        rule?: string;
+        details?: Record<string, unknown>;
+      };
       const errorCode =
         err.code === 'BUSINESS_RULE_VIOLATION' &&
-        err.rule === 'action.version.mismatch'
+          err.rule === 'action.version.mismatch'
           ? CommandErrorCodes.OPTIMISTIC_LOCK_FAILED
           : CommandErrorCodes.BUSINESS_RULE_VIOLATION;
 
@@ -87,7 +92,10 @@ export class UpdateActionHandler
     }
 
     if (result.events.length > 0) {
-      await this.actionsRepo.update(aggregate, result.events, payload.expectedVersion);
+      await this.actionsRepo.update(
+        aggregate,
+        result.events,
+      );
     }
 
     this.logger.log({

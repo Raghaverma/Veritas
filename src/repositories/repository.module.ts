@@ -16,4 +16,4 @@ import { EventBusModule } from '../event-bus/event-bus.module';
   providers: [UsersRepo, ActionsRepo, PoliciesRepo],
   exports: [UsersRepo, ActionsRepo, PoliciesRepo],
 })
-export class RepositoryModule { }
+export class RepositoryModule {}
