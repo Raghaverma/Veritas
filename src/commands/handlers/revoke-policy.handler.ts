@@ -28,7 +28,7 @@ export class RevokePolicyHandler implements ICommandHandler<
 > {
   private readonly logger = new Logger(RevokePolicyHandler.name);
 
-  constructor(private readonly policiesRepo: PoliciesRepo) { }
+  constructor(private readonly policiesRepo: PoliciesRepo) {}
 
   async execute(
     command: RevokePolicyCommand,
@@ -71,10 +71,7 @@ export class RevokePolicyHandler implements ICommandHandler<
       );
     }
 
-    await this.policiesRepo.update(
-      policy,
-      result.events,
-    );
+    await this.policiesRepo.update(policy, result.events);
 
     this.logger.log({
       message: 'Policy revoked successfully',

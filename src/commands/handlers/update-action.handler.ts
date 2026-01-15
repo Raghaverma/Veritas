@@ -16,7 +16,6 @@ import {
 } from '../../shared/types/command.types';
 import { UpdateActionCommand, ActionCommandTypes } from '../action.commands';
 import { ActionsRepo } from '../../repositories/actions.repo';
-import { EntityNotFoundError } from '../../shared/errors/domain.errors';
 
 export interface UpdateActionResult {
   actionId: string;
@@ -31,7 +30,7 @@ export class UpdateActionHandler implements ICommandHandler<
 > {
   private readonly logger = new Logger(UpdateActionHandler.name);
 
-  constructor(private readonly actionsRepo: ActionsRepo) { }
+  constructor(private readonly actionsRepo: ActionsRepo) {}
 
   async execute(
     command: UpdateActionCommand,
@@ -79,7 +78,7 @@ export class UpdateActionHandler implements ICommandHandler<
       };
       const errorCode =
         err.code === 'BUSINESS_RULE_VIOLATION' &&
-          err.rule === 'action.version.mismatch'
+        err.rule === 'action.version.mismatch'
           ? CommandErrorCodes.OPTIMISTIC_LOCK_FAILED
           : CommandErrorCodes.BUSINESS_RULE_VIOLATION;
 
@@ -92,10 +91,7 @@ export class UpdateActionHandler implements ICommandHandler<
     }
 
     if (result.events.length > 0) {
-      await this.actionsRepo.update(
-        aggregate,
-        result.events,
-      );
+      await this.actionsRepo.update(aggregate, result.events);
     }
 
     this.logger.log({

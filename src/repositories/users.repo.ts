@@ -10,7 +10,7 @@ import { DrizzleService } from '../helpers/drizzle/drizzle.service';
 import { CacheService } from '../helpers/cache/cache.service';
 import { desc, eq } from 'drizzle-orm';
 import { users } from '../db/schema';
-import { User, NewUser } from '../db/types';
+import { User } from '../db/types';
 import { CacheMapper } from '../helpers/cache/cache.mapper';
 
 @Injectable()

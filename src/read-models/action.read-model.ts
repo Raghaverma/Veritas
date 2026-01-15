@@ -90,7 +90,7 @@ export class ActionReadModel {
   constructor(
     private readonly drizzleService: DrizzleService,
     private readonly cacheService: CacheService,
-  ) { }
+  ) {}
 
   /**
    * Get a single action with full details.

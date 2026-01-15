@@ -18,8 +18,6 @@ import {
   Get,
   Post,
   Put,
-  Patch,
-  Delete,
   Body,
   Param,
   Query,
@@ -42,7 +40,6 @@ import {
   GetAuthenticatedUser,
   AuthenticatedUser,
 } from '../../middlewares/auth.middleware';
-import { RequestContext } from '../../shared/context/request-context';
 import { CommandErrorCodes } from '../../shared/types/command.types';
 import {
   CreateActionDto,
@@ -89,7 +86,6 @@ export class ActionsController {
   @ApiResponse({ status: 422, description: 'Business rule violation' })
   async createAction(
     @Body() dto: CreateActionDto,
-    @GetAuthenticatedUser() user: AuthenticatedUser,
   ): Promise<CreateActionResponseDto> {
     const command = CommandFactory.create(ActionCommandTypes.CREATE_ACTION, {
       name: dto.name,
@@ -125,7 +121,6 @@ export class ActionsController {
   async updateAction(
     @Param('actionId') actionId: string,
     @Body() dto: UpdateActionDto,
-    @GetAuthenticatedUser() user: AuthenticatedUser,
   ): Promise<UpdateActionResponseDto> {
     const command = CommandFactory.create(ActionCommandTypes.UPDATE_ACTION, {
       actionId,
@@ -164,7 +159,6 @@ export class ActionsController {
   async completeAction(
     @Param('actionId') actionId: string,
     @Body() dto: CompleteActionDto,
-    @GetAuthenticatedUser() user: AuthenticatedUser,
   ): Promise<CompleteActionResponseDto> {
     const command = CommandFactory.create(ActionCommandTypes.COMPLETE_ACTION, {
       actionId,
@@ -203,7 +197,6 @@ export class ActionsController {
   async cancelAction(
     @Param('actionId') actionId: string,
     @Body() dto: CancelActionDto,
-    @GetAuthenticatedUser() user: AuthenticatedUser,
   ): Promise<CancelActionResponseDto> {
     const command = CommandFactory.create(ActionCommandTypes.CANCEL_ACTION, {
       actionId,

@@ -31,7 +31,7 @@ export class CancelActionHandler implements ICommandHandler<
 > {
   private readonly logger = new Logger(CancelActionHandler.name);
 
-  constructor(private readonly actionsRepo: ActionsRepo) { }
+  constructor(private readonly actionsRepo: ActionsRepo) {}
 
   async execute(
     command: CancelActionCommand,
@@ -71,7 +71,7 @@ export class CancelActionHandler implements ICommandHandler<
       };
       const errorCode =
         err.code === 'BUSINESS_RULE_VIOLATION' &&
-          err.rule === 'action.version.mismatch'
+        err.rule === 'action.version.mismatch'
           ? CommandErrorCodes.OPTIMISTIC_LOCK_FAILED
           : CommandErrorCodes.BUSINESS_RULE_VIOLATION;
 
@@ -83,10 +83,7 @@ export class CancelActionHandler implements ICommandHandler<
       );
     }
 
-    await this.actionsRepo.update(
-      aggregate,
-      result.events,
-    );
+    await this.actionsRepo.update(aggregate, result.events);
 
     this.logger.log({
       message: 'Action cancelled successfully',

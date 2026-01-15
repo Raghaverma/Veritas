@@ -11,11 +11,7 @@
  */
 
 import { Module, OnModuleInit, Type } from '@nestjs/common';
-import {
-  DiscoveryModule,
-  DiscoveryService,
-  MetadataScanner,
-} from '@nestjs/core';
+import { DiscoveryModule, DiscoveryService } from '@nestjs/core';
 import {
   CommandBus,
   CommandHandlerRegistry,

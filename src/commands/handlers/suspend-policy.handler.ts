@@ -28,7 +28,7 @@ export class SuspendPolicyHandler implements ICommandHandler<
 > {
   private readonly logger = new Logger(SuspendPolicyHandler.name);
 
-  constructor(private readonly policiesRepo: PoliciesRepo) { }
+  constructor(private readonly policiesRepo: PoliciesRepo) {}
 
   async execute(
     command: SuspendPolicyCommand,
@@ -66,10 +66,7 @@ export class SuspendPolicyHandler implements ICommandHandler<
       );
     }
 
-    await this.policiesRepo.update(
-      policy,
-      result.events,
-    );
+    await this.policiesRepo.update(policy, result.events);
 
     this.logger.log({
       message: 'Policy suspended successfully',

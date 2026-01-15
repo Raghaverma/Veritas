@@ -25,7 +25,6 @@ import {
 import { CreateActionCommand, ActionCommandTypes } from '../action.commands';
 import { ActionsRepo } from '../../repositories/actions.repo';
 import { ActionAggregate } from '../../domain/aggregates/action.aggregate';
-import { Action } from '../../db/types';
 
 export interface CreateActionResult {
   actionId: string;

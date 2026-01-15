@@ -69,7 +69,7 @@ export abstract class BaseDomainEventWorker {
    * Check if this handler should process the event.
    * Override to filter events by type or other criteria.
    */
-  protected shouldProcess(job: Job<DomainEventJobData>): boolean {
+  protected shouldProcess(): boolean {
     return true;
   }
 
@@ -82,7 +82,7 @@ export abstract class BaseDomainEventWorker {
       job.data;
     const handlerName = this.getHandlerName();
 
-    if (!this.shouldProcess(job)) {
+    if (!this.shouldProcess()) {
       this.logger.debug({
         message: 'Skipping event - not handled by this worker',
         eventId,

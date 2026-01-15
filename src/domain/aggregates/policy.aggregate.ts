@@ -29,11 +29,6 @@ import {
 import { EventMetadata } from '../../shared/types/event.types';
 import { PolicyStatus } from '../../db/types';
 import {
-  PolicyCreatedEvent,
-  PolicyActivatedEvent,
-  PolicySuspendedEvent,
-  PolicyResumedEvent,
-  PolicyRevokedEvent,
   createPolicyCreatedEvent,
   createPolicyActivatedEvent,
   createPolicySuspendedEvent,

@@ -18,7 +18,6 @@
 import {
   IDomainEvent,
   EventMetadata,
-  createEventFactory,
   AggregateTypes,
 } from '../../shared/types/event.types';
 import { ActionType, StatusType } from '../../db/types';

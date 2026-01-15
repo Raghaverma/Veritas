@@ -27,7 +27,7 @@ import {
 import { Queue } from 'bullmq';
 import { InjectQueue } from '@nestjs/bullmq';
 import { DrizzleService } from '../helpers/drizzle/drizzle.service';
-import { eventOutbox, domainEvents } from '../db/schema';
+import { eventOutbox } from '../db/schema';
 import { eq, and, or, lt, sql } from 'drizzle-orm';
 import { EventOutboxEntry } from '../db/types';
 

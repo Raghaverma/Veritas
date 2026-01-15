@@ -28,7 +28,7 @@ export class ResumePolicyHandler implements ICommandHandler<
 > {
   private readonly logger = new Logger(ResumePolicyHandler.name);
 
-  constructor(private readonly policiesRepo: PoliciesRepo) { }
+  constructor(private readonly policiesRepo: PoliciesRepo) {}
 
   async execute(
     command: ResumePolicyCommand,
@@ -66,10 +66,7 @@ export class ResumePolicyHandler implements ICommandHandler<
       );
     }
 
-    await this.policiesRepo.update(
-      policy,
-      result.events,
-    );
+    await this.policiesRepo.update(policy, result.events);
 
     this.logger.log({
       message: 'Policy resumed successfully',

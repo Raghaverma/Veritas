@@ -24,7 +24,6 @@ import {
   varchar,
   text,
   jsonb,
-  boolean,
   index,
   uuid,
   integer,

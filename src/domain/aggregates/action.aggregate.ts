@@ -167,17 +167,21 @@ export class ActionAggregate extends AggregateRoot<string> {
 
     const aggregate = new ActionAggregate(state);
 
-    const event = createActionCreatedEvent(id, {
-      actionId: id,
-      userId,
-      name: state.name,
-      type,
-      description: state.description ?? undefined,
-      metadata: metadata ?? undefined,
-      status: 'active',
-      version: 1,
-      createdAt: now.toISOString(),
-    }, eventMetadata);
+    const event = createActionCreatedEvent(
+      id,
+      {
+        actionId: id,
+        userId,
+        name: state.name,
+        type,
+        description: state.description ?? undefined,
+        metadata: metadata ?? undefined,
+        status: 'active',
+        version: 1,
+        createdAt: now.toISOString(),
+      },
+      eventMetadata,
+    );
 
     aggregate.apply(event);
 
@@ -266,7 +270,10 @@ export class ActionAggregate extends AggregateRoot<string> {
     const changeRecord: {
       name?: { from: string; to: string };
       description?: { from: string | null; to: string | null };
-      metadata?: { from: Record<string, unknown> | null; to: Record<string, unknown> | null };
+      metadata?: {
+        from: Record<string, unknown> | null;
+        to: Record<string, unknown> | null;
+      };
     } = {};
 
     const now = new Date();
@@ -277,7 +284,10 @@ export class ActionAggregate extends AggregateRoot<string> {
       this.state.name = changes.name.trim();
     }
 
-    if (changes.description !== undefined && changes.description !== this.state.description) {
+    if (
+      changes.description !== undefined &&
+      changes.description !== this.state.description
+    ) {
       changeRecord.description = {
         from: this.state.description,
         to: changes.description?.trim() || null,
@@ -301,12 +311,16 @@ export class ActionAggregate extends AggregateRoot<string> {
     this.state.updatedAt = now;
     this.setVersion(newVersion);
 
-    const event = createActionUpdatedEvent(this.state.id, {
-      actionId: this.state.id,
-      changes: changeRecord,
-      newVersion,
-      updatedAt: now.toISOString(),
-    }, eventMetadata);
+    const event = createActionUpdatedEvent(
+      this.state.id,
+      {
+        actionId: this.state.id,
+        changes: changeRecord,
+        newVersion,
+        updatedAt: now.toISOString(),
+      },
+      eventMetadata,
+    );
 
     this.apply(event);
 
@@ -353,12 +367,16 @@ export class ActionAggregate extends AggregateRoot<string> {
     this.state.version = newVersion;
     this.setVersion(newVersion);
 
-    const event = createActionCompletedEvent(this.state.id, {
-      actionId: this.state.id,
-      result,
-      completedAt: now.toISOString(),
-      newVersion,
-    }, eventMetadata);
+    const event = createActionCompletedEvent(
+      this.state.id,
+      {
+        actionId: this.state.id,
+        result,
+        completedAt: now.toISOString(),
+        newVersion,
+      },
+      eventMetadata,
+    );
 
     this.apply(event);
 
@@ -414,12 +432,16 @@ export class ActionAggregate extends AggregateRoot<string> {
     this.state.version = newVersion;
     this.setVersion(newVersion);
 
-    const event = createActionCancelledEvent(this.state.id, {
-      actionId: this.state.id,
-      reason: reason.trim(),
-      cancelledAt: now.toISOString(),
-      newVersion,
-    }, eventMetadata);
+    const event = createActionCancelledEvent(
+      this.state.id,
+      {
+        actionId: this.state.id,
+        reason: reason.trim(),
+        cancelledAt: now.toISOString(),
+        newVersion,
+      },
+      eventMetadata,
+    );
 
     this.apply(event);
 

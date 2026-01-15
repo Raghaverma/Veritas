@@ -28,7 +28,7 @@ export class ActivatePolicyHandler implements ICommandHandler<
 > {
   private readonly logger = new Logger(ActivatePolicyHandler.name);
 
-  constructor(private readonly policiesRepo: PoliciesRepo) { }
+  constructor(private readonly policiesRepo: PoliciesRepo) {}
 
   async execute(
     command: ActivatePolicyCommand,
@@ -66,10 +66,7 @@ export class ActivatePolicyHandler implements ICommandHandler<
       );
     }
 
-    await this.policiesRepo.update(
-      policy,
-      result.events,
-    );
+    await this.policiesRepo.update(policy, result.events);
 
     this.logger.log({
       message: 'Policy activated successfully',
